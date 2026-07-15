@@ -1,0 +1,4 @@
+interface:
+  display_name: "FastAPI Configure SQLModel Database"
+  short_description: "Add PostgreSQL, SQLModel, and Alembic"
+  default_prompt: "Use $fastapi-configure-sqlmodel-database to add typed PostgreSQL and Alembic configuration to this FastAPI project."

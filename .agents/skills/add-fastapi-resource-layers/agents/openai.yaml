@@ -1,4 +1,0 @@
-interface:
-  display_name: "Add FastAPI Resource Layers"
-  short_description: "Generate layered CRUD API resources"
-  default_prompt: "Use $add-fastapi-resource-layers to add a layered CRUD resource to this FastAPI project."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Scaffold FastAPI API"
-  short_description: "Replicate the reference FastAPI CRUD API"
-  default_prompt: "Use $scaffold-fastapi-api to reproduce the reference FastAPI user CRUD API in a destination repository."

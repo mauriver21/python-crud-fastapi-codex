@@ -1,9 +1,9 @@
 ---
-name: configure-sqlmodel-database
+name: fastapi-configure-sqlmodel-database
 description: Add typed PostgreSQL configuration, SQLModel engine and session dependencies, and Alembic migrations to a Python 3.12 FastAPI project. Use when Codex needs to configure a database, add PostgreSQL or SQLModel, establish get_settings/get_engine/get_session interfaces, or introduce versioned migrations to a compatible src-layout service.
 ---
 
-# Configure SQLModel Database
+# FastAPI Configure SQLModel Database
 
 Integrate database infrastructure without introducing domain models.
 

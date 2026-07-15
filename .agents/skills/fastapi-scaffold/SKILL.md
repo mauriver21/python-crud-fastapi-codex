@@ -1,9 +1,9 @@
 ---
-name: scaffold-fastapi-api
+name: fastapi-scaffold
 description: Scaffold a Python 3.12 FastAPI user CRUD API that reproduces the architecture and behavior of the python-crud-rest-api reference repository, including PostgreSQL, SQLModel, JWT authentication, custom migrations, dotenv configuration, controller tests, and flat src imports. Use when Codex needs to create or reproduce this complete reference application without modernizing its conventions.
 ---
 
-# Scaffold FastAPI API
+# FastAPI Scaffold
 
 Reproduce the complete reference application from the bundled project template. Preserve its architecture and behavior instead of replacing its conventions with newer patterns.
 

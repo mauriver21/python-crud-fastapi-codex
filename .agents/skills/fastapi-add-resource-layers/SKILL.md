@@ -1,16 +1,16 @@
 ---
-name: add-fastapi-resource-layers
+name: fastapi-add-resource-layers
 description: Generate a layered FastAPI CRUD resource with request/response schemas, SQLModel table, repository, service, routes, router registration, and API tests. Use when Codex needs to add an entity, REST resource, CRUD endpoints, pagination, or routes → services → repositories → database-model layers to a compatible FastAPI and SQLModel project.
 ---
 
-# Add FastAPI Resource Layers
+# FastAPI Add Resource Layers
 
 Generate one coherent vertical slice while preserving strict layer boundaries.
 
 ## Workflow
 
 1. Inspect the package, database session dependency, router aggregator, model registry, and existing names.
-2. Add database infrastructure first with `configure-sqlmodel-database` when `db/engine.py` is absent.
+2. Add database infrastructure first with `fastapi-configure-sqlmodel-database` when `db/engine.py` is absent.
 3. Define each field as `name:type`, optionally adding `optional`, `unique`, or both. Read [references/field-spec.md](references/field-spec.md).
 4. Preview generation:
 

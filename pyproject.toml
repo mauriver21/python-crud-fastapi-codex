@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "{{project_name}}"
+name = "python-crud-fastapi-codex"
 version = "0.1.0"
 description = "FastAPI user CRUD API with PostgreSQL and JWT authentication"
 readme = "README.md"

@@ -1,0 +1,65 @@
+from uuid import UUID
+
+from sqlalchemy.exc import IntegrityError
+from sqlmodel import Session
+
+from {{package_name}}.db.models.{{resource_name}} import {{class_name}}
+from {{package_name}}.repositories import {{resource_name}} as repository
+from {{package_name}}.schemas.{{resource_name}} import {{class_name}}Create, {{class_name}}Page, {{class_name}}Read, {{class_name}}Update
+
+
+class {{class_name}}NotFoundError(Exception):
+    pass
+
+
+class {{class_name}}ConflictError(Exception):
+    pass
+
+
+def _required(session: Session, resource_id: UUID) -> {{class_name}}:
+    entity = repository.get(session, resource_id)
+    if entity is None:
+        raise {{class_name}}NotFoundError
+    return entity
+
+
+def _commit(session: Session, entity: {{class_name}} | None = None) -> None:
+    try:
+        session.commit()
+        if entity is not None:
+            session.refresh(entity)
+    except IntegrityError as error:
+        session.rollback()
+        raise {{class_name}}ConflictError from error
+
+
+def create(session: Session, payload: {{class_name}}Create) -> {{class_name}}Read:
+    entity = repository.create(session, payload)
+    _commit(session, entity)
+    return {{class_name}}Read.model_validate(entity)
+
+
+def get(session: Session, resource_id: UUID) -> {{class_name}}Read:
+    return {{class_name}}Read.model_validate(_required(session, resource_id))
+
+
+def list_page(session: Session, page: int, size: int) -> {{class_name}}Page:
+    items, total = repository.list_page(session, page, size)
+    return {{class_name}}Page(
+        items=[{{class_name}}Read.model_validate(item) for item in items],
+        total=total,
+        page=page,
+        size=size,
+    )
+
+
+def update(session: Session, resource_id: UUID, payload: {{class_name}}Update) -> {{class_name}}Read:
+    entity = repository.update(_required(session, resource_id), payload)
+    _commit(session, entity)
+    return {{class_name}}Read.model_validate(entity)
+
+
+def delete(session: Session, resource_id: UUID) -> None:
+    repository.delete(session, _required(session, resource_id))
+    _commit(session)
+

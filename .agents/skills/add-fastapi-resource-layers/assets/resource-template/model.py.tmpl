@@ -1,0 +1,19 @@
+from datetime import datetime, timezone
+from uuid import UUID, uuid4
+
+from sqlmodel import Field, SQLModel
+{{model_imports}}
+
+
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+class {{class_name}}(SQLModel, table=True):
+    __tablename__ = "{{plural_name}}"
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+{{model_fields}}
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
+

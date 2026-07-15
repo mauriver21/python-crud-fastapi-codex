@@ -1,0 +1,28 @@
+from datetime import datetime
+from uuid import UUID
+
+from sqlmodel import SQLModel
+{{schema_imports}}
+
+
+class {{class_name}}Create(SQLModel):
+{{create_fields}}
+
+
+class {{class_name}}Update(SQLModel):
+{{update_fields}}
+
+
+class {{class_name}}Read(SQLModel):
+    id: UUID
+{{read_fields}}
+    created_at: datetime
+    updated_at: datetime
+
+
+class {{class_name}}Page(SQLModel):
+    items: list[{{class_name}}Read]
+    total: int
+    page: int
+    size: int
+

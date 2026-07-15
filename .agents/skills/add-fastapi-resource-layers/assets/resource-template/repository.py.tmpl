@@ -1,0 +1,33 @@
+from uuid import UUID
+
+from sqlmodel import Session, func, select
+
+from {{package_name}}.db.models.{{resource_name}} import {{class_name}}, utc_now
+from {{package_name}}.schemas.{{resource_name}} import {{class_name}}Create, {{class_name}}Update
+
+
+def create(session: Session, payload: {{class_name}}Create) -> {{class_name}}:
+    entity = {{class_name}}.model_validate(payload)
+    session.add(entity)
+    return entity
+
+
+def get(session: Session, resource_id: UUID) -> {{class_name}} | None:
+    return session.get({{class_name}}, resource_id)
+
+
+def list_page(session: Session, page: int, size: int) -> tuple[list[{{class_name}}], int]:
+    statement = select({{class_name}}).offset((page - 1) * size).limit(size)
+    items = list(session.exec(statement).all())
+    total = session.exec(select(func.count()).select_from({{class_name}})).one()
+    return items, total
+
+
+def update(entity: {{class_name}}, payload: {{class_name}}Update) -> {{class_name}}:
+    entity.sqlmodel_update(payload.model_dump(exclude_unset=True))
+    entity.updated_at = utc_now()
+    return entity
+
+
+def delete(session: Session, entity: {{class_name}}) -> None:
+    session.delete(entity)

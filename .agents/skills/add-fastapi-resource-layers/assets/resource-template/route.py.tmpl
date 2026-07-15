@@ -1,0 +1,67 @@
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from sqlmodel import Session
+
+from {{package_name}}.db.engine import get_session
+from {{package_name}}.schemas.{{resource_name}} import {{class_name}}Create, {{class_name}}Page, {{class_name}}Read, {{class_name}}Update
+from {{package_name}}.services import {{resource_name}} as service
+
+router = APIRouter(prefix="/{{plural_name}}", tags=["{{plural_name}}"])
+
+
+def _not_found() -> HTTPException:
+    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="{{class_name}} not found")
+
+
+def _conflict() -> HTTPException:
+    return HTTPException(status_code=status.HTTP_409_CONFLICT, detail="{{class_name}} conflicts with existing data")
+
+
+@router.post("", response_model={{class_name}}Read, status_code=status.HTTP_201_CREATED)
+def create(payload: {{class_name}}Create, session: Session = Depends(get_session)) -> {{class_name}}Read:
+    try:
+        return service.create(session, payload)
+    except service.{{class_name}}ConflictError as error:
+        raise _conflict() from error
+
+
+@router.get("", response_model={{class_name}}Page)
+def list_page(
+    page: int = Query(default=1, ge=1),
+    size: int = Query(default=20, ge=1, le=100),
+    session: Session = Depends(get_session),
+) -> {{class_name}}Page:
+    return service.list_page(session, page, size)
+
+
+@router.get("/{resource_id}", response_model={{class_name}}Read)
+def get(resource_id: UUID, session: Session = Depends(get_session)) -> {{class_name}}Read:
+    try:
+        return service.get(session, resource_id)
+    except service.{{class_name}}NotFoundError as error:
+        raise _not_found() from error
+
+
+@router.put("/{resource_id}", response_model={{class_name}}Read)
+def update(
+    resource_id: UUID,
+    payload: {{class_name}}Update,
+    session: Session = Depends(get_session),
+) -> {{class_name}}Read:
+    try:
+        return service.update(session, resource_id, payload)
+    except service.{{class_name}}NotFoundError as error:
+        raise _not_found() from error
+    except service.{{class_name}}ConflictError as error:
+        raise _conflict() from error
+
+
+@router.delete("/{resource_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete(resource_id: UUID, session: Session = Depends(get_session)) -> Response:
+    try:
+        service.delete(session, resource_id)
+    except service.{{class_name}}NotFoundError as error:
+        raise _not_found() from error
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
